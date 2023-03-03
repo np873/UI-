@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>
+            Mariocart - Sign in 
+        </title>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        <link rel="stylesheet" href="/static/lib/bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="/static/css/base.css">
+
+        <script src="/static/lib/jquery/jquery.min.js"></script>
+        <script src="/static/lib/popper/popper.min.js"></script>
+        <script src="/static/lib/bootstrap/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+
+        <div class="text-right" style="padding-top: 1rem; padding-right: 1rem;">
+            <button id="close-button" type="button" class="btn-close" aria-label="Close" style="color: red; font-size: large;">&times;</button>
+            <script type="text/javascript">
+                document.getElementById("close-button").onclick = function () {
+                    location.href = "/";
+                };
+            </script> 
+        </div>
+
+        <div class="text-center" style="padding-bottom: 2rem;">
+            <a>Sign in</a>
+        </div> 
+
+        <section class="sign-in-or-create-account">
+
+            <div class="text-center">
+                <h1 class="jumbotron-heading">Mariocart</h1>
+            </div>
+                
+            <div class="mx-auto" style="width: 300px; padding-top: 1.5rem;">
+                <label>Email</label>
+                <p>
+                    <input type="email" placeholder="Your Email Address" size="30">
+                </p>
+                <label>Password</label>
+                <p>
+                    <input type="password" placeholder="Your Password" size="30">
+                </p> 
+                <p>
+                    <a href="#" style="font-size: small;">Forgot Password?</a>
+                </p> 
+                
+                <button class="btn btn-secondary my-2 mr-2" style="width: 300px; font-size: small;">Sign in</button>
+                <hr style="max-width: 50%; background-color: black;">
+                <p>
+                    <a style="font-size: small;">Don't have an Account? <a href="/create_account">Register here</a></a>
+                </p>
+                <button id="create-account-btn" class="btn btn-secondary my-2 mr-2" style="width: 300px; font-size: small;">Create Account</button>
+                <script type="text/javascript">
+                    document.getElementById("create-account-btn").onclick = function () {
+                        location.href = "/create_account";
+                    };
+                </script>
+            </div>
+            
+        </section>
+    </body>
+</html>

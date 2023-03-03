@@ -1,0 +1,46 @@
+body {
+    font-size: 1rem;
+}
+
+header {
+    background: olivedrab;
+}
+
+input::placeholder{
+    font-size: small;
+}
+
+.navbar-expnd-md .navbar-nav .nav-link {
+    padding-left: 1rem;
+    padding-right: 1rem;
+    color: #FFC600
+}
+
+.img-width {
+    width: 100px;
+}
+
+.content {
+    padding: 2rem 1.5rem;
+}
+
+.jumbotron {
+    padding-top: 0.2rem;
+    padding-left: 1.3rem;
+    padding-right: 1.3rem;
+    padding-bottom: 0.5rem;
+    background: 0;
+}
+
+.sign-in-or-create-account{
+        padding: 2.5rem;
+}
+
+.jumbotron img {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.deals{
+    padding-left: 1.3rem;
+}
+
