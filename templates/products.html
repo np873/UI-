@@ -8,10 +8,10 @@ Categories
 {% block content %}
 
   <ul>
-    {% for data in data %}
+    {% for category in data %}
     <li>
-        <img src=" {{ url_for('static', filename='img/categories/' + data.image) }} " alt=" {{ data['name'] }} " style="height: 100px; width: 100px;">
-        <a style="font-size: large; padding: 1.5rem;">{{ data.name }}</a>
+        <img src=" {{ url_for('static', filename='img/categories/' + category.image) }} " alt=" {{ category['name'] }} " style="height: 100px; width: 100px; padding: 1.5rem;">
+        <a style="font-size: large;">{{ category.name }}</a>
     </li>
     {% endfor %}
 </ul>
