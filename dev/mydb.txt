@@ -1,0 +1,10 @@
+sqlite3 categories.db 
+
+CREATE TABLE IF NOT EXISTS categories (
+    id TEXT PRIMARY KEY
+    ,image TEXT
+    ,name TEXT NOT NULL
+);
+
+.mode csv
+.import dev/categories.csv categories
