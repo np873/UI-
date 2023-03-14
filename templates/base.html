@@ -34,8 +34,8 @@ CS530: DUI, Assignment [1] -->
                         <li class="nav-item{% if active == 'Home' %} active{% endif %}">
                             <a class="nav-link" href="/">Home</a>
                         </li>
-                        <li class="nav-item{% if active == 'Products' %} active {% endif %}">
-                            <a class="nav-link" href="/products">Products</a>
+                        <li class="nav-item{% if active == 'Categories' %} active {% endif %}">
+                            <a class="nav-link" href="/categories">Products</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
@@ -53,6 +53,7 @@ CS530: DUI, Assignment [1] -->
                 </div>
 
                 <a href="#"><img src="/static/img/cart1.svg" style="max-height: 25px;"></a>
+                <span id="cart-quantity">0</span>
             </nav>
         </div>
     </header>

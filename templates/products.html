@@ -1,19 +1,24 @@
 {% extends 'base.html' %}
 {% set active = "Products" %}
 
+{% block header %}
+<script src="/static/js/productViewer.js"></script>
+{% endblock %}
+
 {% block title %}
-Categories
 {% endblock %}
 
 {% block content %}
 
-  <ul>
-    {% for category in data %}
-    <li>
-        <img src=" {{ url_for('static', filename='img/categories/' + category.image) }} " alt=" {{ category['name'] }} " style="height: 100px; width: 100px; padding: 1.5rem;">
-        <a style="font-size: large;">{{ category.name }}</a>
-    </li>
-    {% endfor %}
-</ul>
+<img src="static/img/background/produce.jpg" class="img-fluid">
+<div id="cards"  style="padding: 1rem;">
+</div>
+
+<script>
+    $(() => {
+        const productViewer = new ProductViewer(10, 4);
+        productViewer.load('{{ request.args.get("categoryid") }}');
+    });
+</script>
 
 {% endblock %}
