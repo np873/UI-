@@ -1,10 +1,29 @@
 sqlite3 categories.db 
+DROP TABLE IF EXISTS categories;
 
 CREATE TABLE IF NOT EXISTS categories (
-    id TEXT PRIMARY KEY
+    categoryid TEXT PRIMARY KEY
     ,image TEXT
     ,name TEXT NOT NULL
 );
 
 .mode csv
 .import dev/categories.csv categories
+
+
+sqlite3 products.db
+DROP TABLE IF EXISTS products;
+
+CREATE TABLE IF NOT EXISTS products (
+    categoryid TEXT
+    ,productid TEXT PRIMARY KEY
+    ,image TEXT
+    ,name TEXT NOT NULL
+    ,price REAL
+    ,weight TEXT
+    ,discount REAL
+    ,foreign key (categoryid) references categories(categoryid)
+);
+
+.mode csv
+.import dev/products.csv products
