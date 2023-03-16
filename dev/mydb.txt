@@ -17,7 +17,7 @@ DROP TABLE IF EXISTS products;
 CREATE TABLE IF NOT EXISTS products (
     categoryid TEXT
     ,productid TEXT PRIMARY KEY
-    ,image TEXT
+    ,image VARBINARY
     ,name TEXT NOT NULL
     ,price REAL
     ,weight TEXT
@@ -27,3 +27,17 @@ CREATE TABLE IF NOT EXISTS products (
 
 .mode csv
 .import dev/products.csv products
+
+sqlite3 cart.db
+DROP TABLE IF EXISTS cart;
+
+CREATE TABLE IF NOT EXISTS cart (
+    cartid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+    productid TEXT NOT NULL,
+    name TEXT NOT NULL,
+    price REAL,
+    weight TEXT,
+    quantity INT,
+    image VARBINARY,
+    foreign key (productid) references products(productid)
+);

@@ -6,6 +6,11 @@
 {% endblock %}
 
 {% block title %}
+{% for data in data %}
+    {% for category in category %}
+        {{ category.name }}
+    {% endfor %}
+{% endfor %}
 {% endblock %}
 
 {% block content %}
@@ -14,9 +19,10 @@
 <div id="cards"  style="padding: 1rem;">
 </div>
 
+
 <script>
     $(() => {
-        const productViewer = new ProductViewer(10, 4);
+        const productViewer = new ProductViewer(2, 4);
         productViewer.load('{{ request.args.get("categoryid") }}');
     });
 </script>
