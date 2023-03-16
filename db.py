@@ -10,7 +10,12 @@ class Database:
         c.execute(sql, parameters)
         return c.fetchall()
 
-    # query to return all columns for n bikes in database
+    def insert(self, sql, parameters=[]):
+        c = self.conn.cursor()
+        c.execute(sql, parameters)
+        self.conn.commit()
+        return c.lastrowid
+
     def get_categories(self, n):
         data = self.select(
             'SELECT * FROM categories ORDER BY categoryid ASC LIMIT ?', [n])
@@ -33,7 +38,32 @@ class Database:
             ,'discount': d[6]
         } for d in data]
 
- 
+    def get_product_detail(self, productid):
+        print(productid)
+        data = self.select(
+            'SELECT * FROM products WHERE productid = ?', [productid])
+        print(data)
+        return [{
+            'categoryid': d[0]
+            ,'productid': d[1]
+            ,'image': d[2]
+            ,'name': d[3]
+            ,'price': d[4]
+            ,'weight': d[5]
+            ,'discount': d[6]
+        } for d in data]
+
+    def get_cart_items(self, productid, quantity):
+        data = self.select(
+            'SELECT * FROM cart WHERE productid = ?', [productid])
+        return [{
+            'cartid': d[0],
+            'productid': d[1],
+            'name': d[2],
+            'price': d[3],
+            'weight': d[4],
+            'quantity': d[5]
+        } for d in data]
 
     def close(self):
         self.conn.close()
