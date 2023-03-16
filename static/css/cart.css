@@ -1,0 +1,33 @@
+.modal-dialog-slideout {
+    background-color: #fff;
+    color: #000;
+    position: fixed;
+    right: 400px;
+    top: 0;
+    height: 100%;
+    width: 400px;
+    z-index: 1040;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+    transition: transform 0.3s ease-out;
+}
+
+.modal-dialog-slideout .modal-content {
+    border: none;
+    height: 100%;
+    width: 100%;
+}
+
+.modal-dialog-slideout.show {
+    transform: translateX(-400px);
+}
+
+.modal-dialog-slideout.slideout-right {
+    right: -400px;
+    transform: translateX(400px);
+}
+
+.modal-dialog-slideout.show.slideout-right {
+    transform: translateX(0);
+}
