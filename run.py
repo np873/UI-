@@ -1,6 +1,3 @@
-# Niki Patel, np873@drexel.edu
-# CS530: DUI, Assignment [1]
-
 import os
 from flask import redirect
 
