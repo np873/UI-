@@ -21,9 +21,9 @@ def close_db(exception):
 
 @app.route('/')
 def home():
-    product = get_db().get_top_deals()
-    data = get_db().get_categories(12)
-    return render_template('home.html', data=data, product=product)
+    deals = get_db().get_top_deals()
+    categories = get_db().get_categories(12)
+    return render_template('home.html', categories=categories, deals=deals)
 
 @app.route('/sign_in', methods=['GET', 'POST'])
 def sign_in():
