@@ -76,7 +76,7 @@ class Database:
 
     def get_top_deals(self):
         data = self.select(
-            'SELECT * FROM products WHERE discount > 10 ORDER BY RANDOM()')
+            'SELECT * FROM products WHERE discount > 10 ORDER BY RANDOM() limit 10')
         return [{
             'categoryid': d[0]
             ,'productid': d[1]
