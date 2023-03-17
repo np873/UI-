@@ -20,6 +20,13 @@
 </div>
 
 <script>
+    let user;
+    {% if session['user'] %}
+        user = "{{ session['user'] }}";
+    {% else %}
+        user = null;
+    {% endif %}
+
     $(() => {
         const productViewer = new ProductViewer(3, 4);
         productViewer.load('{{ request.args.get("categoryid") }}');

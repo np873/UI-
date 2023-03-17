@@ -4,6 +4,15 @@ Cart
 {% endblock %}
 
 {% block content %}
+<script>
+  let user;
+  {% if session['user'] %}
+      user = "{{ session['user'] }}";
+  {% else %}
+      user = null;
+  {% endif %}
+</script>
+
 <script src="/static/js/productDetail.js"></script>
  
 <table class="container">
