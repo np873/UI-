@@ -17,7 +17,6 @@ CS530: DUI, Assignment [1] -->
     <script src="/static/lib/jquery/jquery.min.js"></script>
 <script src="/static/lib/popper/popper.min.js"></script>
 <script src="/static/lib/bootstrap/bootstrap.min.js"></script>
-<script src="/static/js/productDetail.js"></script>
 
     {% block header %} {% endblock %}
 </head>
@@ -42,24 +41,35 @@ CS530: DUI, Assignment [1] -->
                             <a class="nav-link" href="/categories">Products</a>
                         </li>
                     </ul>
+                    
                     <ul class="navbar-nav ml-auto">
+                        {% if session['user'] %}
+                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle dropdown" href="#" id="navbarDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Sign in
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hi {{ session['user']['firstname'] }}
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 
                                     <a class="dropdown-item loggedin" id="my-account" href="/my_account">My Account</a>
                                     <a class="dropdown-item loggedin" id="my-order" href="/my_orders">My Orders</a>
-                                    <a class="dropdown-item loggedin" id="logout" href="#">Log out</a>
-                                
-                                    <a class="dropdown-item loggedout" id="sign-in" href="/sign_in">Sign in</a>
-                                    <a class="dropdown-item loggedout" href="/create_account">Create Account</a>
+                                    <a class="dropdown-item loggedin" id="logout" href="/logout">Log out</a>
                                 
                             </div>
                             
                         </li>
+                        {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link dropdown-toggle dropdown" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> Sign In
+                        </a><div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item "  href="/sign_in">Sign in</a>
+                                    <a class="dropdown-item " href="/create_account">Create Account</a>
+                                
+                            </div>
+                        </li>
+                    
+                        {% endif %}
                     </ul>
                 </div>
 
@@ -69,68 +79,6 @@ CS530: DUI, Assignment [1] -->
             </nav>
         </div>
     </header>
-
-    <script type="module">
-
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-        import { getDatabase, set, ref, update} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
-        import { getAuth, onAuthStateChanged, signOut} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-        
-        const firebaseConfig = {
-        apiKey: "AIzaSyAwqqos4PSHDSrZARh-wQtelr6kc4iiptI",
-        authDomain: "mariocart-d7fe2.firebaseapp.com",
-        databaseURL: "https://mariocart-d7fe2-default-rtdb.firebaseio.com",
-        projectId: "mariocart-d7fe2",
-        storageBucket: "mariocart-d7fe2.appspot.com",
-        messagingSenderId: "1085313866628",
-        appId: "1:1085313866628:web:6328cefb77856d5e751bd1"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth();
-        const db = getDatabase(app);
-
-        const loggedoutlink = document.querySelectorAll(".loggedout");
-        const loggedinlink = document.querySelectorAll(".loggedin");
-        const menuName = document.getElementById("navbarDropdown");
-        const setupUI = (user) => {
-            if (user){
-                loggedinlink.forEach(item => item.style.display = 'block');
-                loggedoutlink.forEach(item => item.style.display = 'none');
-                
-
-            } else {
-                loggedinlink.forEach(item => item.style.display = 'none');
-                loggedoutlink.forEach(item => item.style.display = 'block');
-                
-            }
-        }
-
-        onAuthStateChanged(auth, (user) => {
-                if (user) {
-                    // User is signed in
-                    const uid = user.uid;
-                    setupUI(user);
-                    menuName.textContent = user.name;
-                
-             } else {
-                    // User is signed out
-                    setupUI();
-                    menuName.textContent = Sign-In;
-                    
-                }
-            });
-
-        const logout = document.getElementById("logout");
-        logout.addEventListener('click', (e) => {
-            signOut(auth).then(() => {
-            // Sign-out successful.
-            }).catch((error) => {
-            // An error happened.
-            });
-        })
-        </script>
     <main>
         {% block content %} {% endblock %}
     </main>

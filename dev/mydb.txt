@@ -1,4 +1,14 @@
-sqlite3 categories.db 
+sqlite3 mariocart.db 
+
+DROP TABLE IF EXISTS users;
+CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY,
+    firstname TEXT NOT NULL,
+    lastname TEXT NOT NULL,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL
+);
+
 DROP TABLE IF EXISTS categories;
 
 CREATE TABLE IF NOT EXISTS categories (
@@ -10,34 +20,34 @@ CREATE TABLE IF NOT EXISTS categories (
 .mode csv
 .import dev/categories.csv categories
 
-
-sqlite3 products.db
 DROP TABLE IF EXISTS products;
 
 CREATE TABLE IF NOT EXISTS products (
     categoryid TEXT
     ,productid TEXT PRIMARY KEY
-    ,image VARBINARY
+    ,image TEXT
     ,name TEXT NOT NULL
     ,price REAL
     ,weight TEXT
     ,discount REAL
+    ,discout_price FLOAT
     ,foreign key (categoryid) references categories(categoryid)
 );
 
 .mode csv
 .import dev/products.csv products
 
-sqlite3 cart.db
 DROP TABLE IF EXISTS cart;
 
 CREATE TABLE IF NOT EXISTS cart (
     cartid INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
     productid TEXT NOT NULL,
+    id INTEGER,
     name TEXT NOT NULL,
     price REAL,
     weight TEXT,
     quantity INT,
-    image VARBINARY,
-    foreign key (productid) references products(productid)
+    image TEXT,
+    foreign key (productid) references products(productid) 
+    foreign key (id) references users(id)
 );

@@ -19,10 +19,9 @@
 <div id="cards"  style="padding: 1rem;">
 </div>
 
-
 <script>
     $(() => {
-        const productViewer = new ProductViewer(2, 4);
+        const productViewer = new ProductViewer(3, 4);
         productViewer.load('{{ request.args.get("categoryid") }}');
     });
 </script>

@@ -36,15 +36,22 @@ Product Detail
                     
                 </div>
                 <div style="padding-top: 1.5rem;">
-                    <button type="button" class="btn btn-primary text-center add-to-cart-btn" style="width: 50%;">Add to cart</button>
+                    <button type="button" class="btn btn-primary text-center" id="back-btn" style="width: 45%;">Back</button>
+                    <script type="text/javascript">
+                        document.getElementById("back-btn").onclick = function (e) {
+                            e.preventDefault();
+                            window.history.back();
+                        };
+                    </script> 
+                    
+                        <button type="button" class="btn btn-primary text-center add-to-cart-btn" style="width: 50%;">Add to cart</button>
+                    
                 </div>
                 <p class="product-added-message" style="display: none; padding: 0.5rem;">Added to cart</p>
             </div>
         </div>
     </div>
-    
 </div>
-
   
 
 {% endblock %}

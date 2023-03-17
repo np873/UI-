@@ -18,6 +18,13 @@
     </head>
 
     <body>
+        {% block content %}
+
+        {% if message %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+        {% endif %}
 
         <div class="text-right" style="padding-top: 1rem; padding-right: 1rem;">
             <button id="close-button" type="button" class="btn-close" aria-label="Close" style="color: red; font-size: large;">&times;</button>
@@ -37,34 +44,34 @@
             <div class="text-center">
                 <h1 class="jumbotron-heading">Mariocart</h1>
             </div>
-                
+            <form action="/sign_in" method="POST">
             <div class="mx-auto" style="width: 300px; padding-top: 1.5rem;">
                 <label>Email</label>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="basic-addon1"><img src="/static/img/icons/email.svg" style="width: 22px; height: 22px;"></span>
                     </div>
-                    <input type="email" id="email-input" class="form-control" placeholder="Your email address">
+                    <input name="email" type="email" id="email-input" class="form-control" placeholder="Your email address">
                 </div>
                 <label>Password</label>
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                       <span class="input-group-text" id="basic-addon1"><img src="/static/img/icons/password.svg" style="width: 20px; height: 20px;"></span>
                     </div>
-                    <input type="password" id="password-input" class="form-control" placeholder="Your password">
+                    <input name="password" type="password" id="password-input" class="form-control" placeholder="Your password">
                 </div> 
                 <p>
                     <a href="#" style="font-size: small;">Forgot Password?</a>
                 </p> 
                 
-                <button class="btn btn-secondary my-2 mr-2" style="width: 300px; font-size: small;" id="sign-in-btn">Sign in</button>
+                <button class="btn btn-secondary my-2 mr-2" style="width: 300px; font-size: small;" type="submit">Sign in</button>
                 <hr style="max-width: 50%; background-color: black;">
                 <p>
                     <a style="font-size: small;">Don't have an Account? <a href="/create_account">Register here</a></a>
                 </p>
                 <button id="create-account-btn" class="btn btn-secondary my-2 mr-2" style="width: 300px; font-size: small;">Create Account</button>
             </div>
-            
+        </form>
         </section>
 
         <script type="text/javascript">
@@ -73,56 +80,6 @@
             };
         </script>
 
-        <script type="module">
-
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-app.js";
-            import { getDatabase, set, ref, update} from "https://www.gstatic.com/firebasejs/9.4.0/firebase-database.js";
-            import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.4.0/firebase-auth.js";
-            
-            const firebaseConfig = {
-            apiKey: "AIzaSyAwqqos4PSHDSrZARh-wQtelr6kc4iiptI",
-            authDomain: "mariocart-d7fe2.firebaseapp.com",
-            databaseURL: "https://mariocart-d7fe2-default-rtdb.firebaseio.com",
-            projectId: "mariocart-d7fe2",
-            storageBucket: "mariocart-d7fe2.appspot.com",
-            messagingSenderId: "1085313866628",
-            appId: "1:1085313866628:web:6328cefb77856d5e751bd1"
-            };
-          
-            // Initialize Firebase
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth();
-            const db = getDatabase(app);
-
-            const sign_in = document.getElementById("sign-in-btn");
-            sign_in.addEventListener("click", (e) => {
-
-                const email = document.getElementById("email-input").value;
-                const password = document.getElementById("password-input").value;
-
-                signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed in 
-                    const user = userCredential.user;
-
-                    const date = new Date();
-                    update(ref(db, 'users/' + user.uid), {
-                            last_login: date,
-                    })
-                    alert(date);
-                    alert("Login Successfully");
-                    window.location.href = "/";
-                    
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    alert(errorMessage);
-                });
-            })
-
-            
-
-          </script>
+        {% endblock %}
     </body>
 </html>

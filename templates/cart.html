@@ -4,8 +4,7 @@ Cart
 {% endblock %}
 
 {% block content %}
-
-<script src="/static/js/cartQuantity.js"></script>
+<script src="/static/js/productDetail.js"></script>
  
 <table class="container">
   <thead>
@@ -24,12 +23,81 @@ Cart
       <td>{{ item[2] }}</td>
       <td>{{ item[3] }}</td>
       <td>{{ item[5] }}</td>
-      <td><button class="remove-from-cart-btn">Remove</button></td>
+      <td><button class="remove-from-cart-btn" data-product-id="{{ item[1] }}">Remove</button></td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
 
+<script>
+$(document).ready(function() {
+  const userId = sessionStorage.getItem('userID');
+
+  // Fetch cart data from the server
+  fetch(`/api/get_cart_items/${userId}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(response.statusText);
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log(data);
+      // Display the cart items in the UI
+      renderCartPage(data.cart);
+    })
+    .catch(error => {
+      console.error(error);
+    });
+
+  // Remove item from cart
+  document.querySelectorAll('.remove-from-cart-btn').forEach((button) => {
+    button.addEventListener('click', () => {
+      const productId = button.getAttribute('data-product-id');
+      fetch('/api/remove_from_cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          productId: productId
+        })
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log(data.message);
+        // Remove the row from the table
+        button.closest('tr').remove();
+        // Update cart page with updated data
+        renderCartPage(data.cart);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    });
+  });
+
+  function renderCartPage(data) {
+    const tableBody = document.querySelector('tbody');
+    tableBody.innerHTML = '';
+    for (const item of data) {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${item[6]}</td>
+        <td>${item[2]}</td>
+        <td>${item[3]}</td>
+        <td>${item[5]}</td>
+        <td><button class="remove-from-cart-btn" data-product-id="${item[1]}">Remove</button></td>
+      `;
+      tableBody.appendChild(row);
+    }
+  }
+});
+
+</script>
 {% endblock %}
-
-
