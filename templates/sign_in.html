@@ -60,25 +60,15 @@
                     </div>
                     <input name="password" type="password" id="password-input" class="form-control" placeholder="Your password">
                 </div> 
-                <p>
-                    <a href="#" style="font-size: small;">Forgot Password?</a>
-                </p> 
                 
                 <button class="btn btn-secondary my-2 mr-2" style="width: 300px; font-size: small;" type="submit">Sign in</button>
                 <hr style="max-width: 50%; background-color: black;">
                 <p>
                     <a style="font-size: small;">Don't have an Account? <a href="/create_account">Register here</a></a>
                 </p>
-                <button id="create-account-btn" class="btn btn-secondary my-2 mr-2" style="width: 300px; font-size: small;">Create Account</button>
             </div>
         </form>
         </section>
-
-        <script type="text/javascript">
-            document.getElementById("create-account-btn").onclick = function () {
-                location.href = "/create_account";
-            };
-        </script>
 
         {% endblock %}
     </body>

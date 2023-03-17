@@ -3,7 +3,6 @@
 
 <head>
     
-    
     <title>Mariocart - {% block title %}{% endblock %}</title>
 
     <meta charset="utf-8">
@@ -45,7 +44,8 @@
                         
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle dropdown" href="#" id="navbarDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hi {{ session['user']['firstname'] }}
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Hi {{ session['user']['firstname'] }}!
                             </a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                 

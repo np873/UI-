@@ -1,8 +1,4 @@
-import os
-from flask import redirect
-
-from flask import Flask, g, jsonify, render_template, request,session
-
+from flask import Flask, g, jsonify, render_template, request,session, redirect
 from db import Database
 from passlib.hash import pbkdf2_sha256
 
@@ -16,7 +12,6 @@ def get_db():
     if db is None:
         db = Database(DATABASE_PATH)
     return db
-
 
 @app.teardown_appcontext
 def close_db(exception):
@@ -39,10 +34,9 @@ def sign_in():
         if email and password:
             user = get_db().get_user(email)
             if user:
+                if pbkdf2_sha256.verify(password, user['password']):
+                    session['user'] = user                
                     return redirect('/')
-                    session['user'] = user
-                    session['logged_in'] = True
-                
             else:
                 message = "User unknown, please try again"
         elif email and not password:
@@ -58,15 +52,31 @@ def create_account():
         lastname = request.form.get('lastname')
         email = request.form.get('email')
         password = request.form.get('password')
+        print('creating account: {}, {}, {}, {}'.format(firstname, lastname, email, password))
         if firstname and lastname and email and password:
             encrypted_password = pbkdf2_sha256.hash(password)
-            get_db().create_account(firstname, lastname, email, password)
+            get_db().create_account(firstname, lastname, email, encrypted_password)
             return redirect('/sign_in')
     return render_template('create_account.html')
 
+@app.route('/create_user', methods=['GET', 'POST'])
+def create_user():
+    if request.method == 'POST':
+        fname = request.form.get('firstname')
+        lname = request.form.get('lastname')
+        email = request.form.get('email')
+        typed_password = request.form.get('password')
+        if fname and lname and email and typed_password:
+            encrypted_password = pbkdf2_sha256.hash(typed_password)
+            get_db().create_user(fname, lname, email, encrypted_password)
+            return redirect('/login')
+        else :
+            message = "Please enter all fields"
+    return render_template('create_user.html', message=message)
+
 @app.route('/logout')
 def logout():
-    session.clear()
+    session.pop('user', None)
     return redirect('/')
 
 @app.route('/categories')
@@ -103,7 +113,7 @@ def api_get_product_detail():
 
 @app.route('/product_detail')
 def product_detail():
-    return render_template('product_detail.html', session=session)
+    return render_template('product_detail.html')
 
 @app.route('/api/add_to_cart', methods=['POST'])
 def add_to_cart():
@@ -134,7 +144,7 @@ def get_cart_items():
     cartid = request.args.get('cartid')
     quantity = request.args.get('quantity')
     data = get_db().select('SELECT * FROM cart')
-    cart = get_db().get_cart_items(productid, quantity)
+    cart = get_db().get_cart_items(cartid, quantity)
     return jsonify(data)
 
 @app.route('/cart')
