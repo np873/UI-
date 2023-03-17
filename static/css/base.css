@@ -3,7 +3,7 @@ body {
 }
 
 header {
-    background: olivedrab;
+    background: #ff7f50;
 }
 
 input::placeholder{
