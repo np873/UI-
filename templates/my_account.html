@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+My Account
+{% endblock %}
+
+{% block content %}
+
+<script>
+  let user;
+  {% if session['user'] %}
+      user = "{{ session['user'] }}";
+  {% else %}
+      user = null;
+  {% endif %}
+</script>
+
+<script src="/static/js/productDetail.js"></script>
+
+<head>
+    <title>
+        Mariocart - My Account
+    </title>
+</head>
+
+<body>
+
+    <div class="text-right" style="padding-top: 1rem; padding-right: 1rem;">
+        <button id="close-button" type="button" class="btn-close" aria-label="Close" style="color: red; font-size: large;">&times;</button>
+        <script type="text/javascript">
+            document.getElementById("close-button").onclick = function () {
+                window.location.href = "/";
+            };
+        </script> 
+    </div>
+    <div class="text-center" style="padding-bottom: 2rem;">
+        <h1 class="jumbotron-heading border">Personal Info</h1>
+    </div>
+    <section class="sign-in-or-create-account">
+        <div style="margin-left: 80px">
+            <h5>Your personal information</h5>
+        </div>
+        <div>
+            <p style="margin: 80px">Your Name:<br>{{ session['user']['firstname'] }} {{ session['user']['lastname'] }} <br><br> Your Email-ID:<br>{{ session['user']['email'] }}</p>
+        </div>
+    </section>
+</body>
+
+{% endblock %}
