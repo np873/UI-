@@ -79,6 +79,11 @@ def logout():
     session.pop('user', None)
     return redirect('/')
 
+# my_account function
+@app.route('/my_account')
+def my_account():
+    return render_template('my_account.html')
+
 @app.route('/categories')
 def categories():
     data = get_db().get_categories(12)
