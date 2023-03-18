@@ -42,13 +42,12 @@ class Database:
             ,'weight': d[5]
             ,'discount': d[6]
             ,'discount_price': d[7]
-        } for d in data]
+        } for d in data] 
 
     def get_product_detail(self, productid):
         print(productid)
         data = self.select(
             'SELECT * FROM products WHERE productid = ?', [productid])
-        print(data)
         return [{
             'categoryid': d[0]
             ,'productid': d[1]
@@ -60,9 +59,12 @@ class Database:
             ,'discount_price': d[7]
         } for d in data]
 
-    def get_cart_items(self, cartid, quantity):
-        data = self.select(
-            'SELECT * FROM cart WHERE cartid = ?', [cartid])
+    def get_cart_items(self, userid, productid=None):
+        if not productid:
+            query = f"SELECT * FROM cart WHERE id = {userid}"
+        else:
+            query = f"SELECT * FROM cart WHERE id = {userid} and productid='{productid}'"
+        data = self.select(query)
         return [{
             'cartid': d[0],
             'productid': d[1],
@@ -74,9 +76,13 @@ class Database:
             'image': d[7]
         } for d in data]
 
+    def get_cart_items_count(self, userid):
+        data = self.select(f'SELECT * FROM cart WHERE id = {userid}')
+        return sum([d[6] for d in data])
+    
     def get_top_deals(self):
         data = self.select(
-            'SELECT * FROM products WHERE discount > 5 ORDER BY RANDOM() limit 12')
+            'SELECT * FROM products ORDER BY discount desc limit 12')
         return [{
             'categoryid': d[0]
             ,'productid': d[1]
@@ -88,12 +94,18 @@ class Database:
             ,'discount_price': d[7]
             } for d in data] 
 
-    def remove_from_cart(self, productid):
+    def remove_from_cart(self, productid, userid):
         print(f"Removing product {productid} from cart...")
         rows_deleted = self.conn.execute(
-            "DELETE FROM cart WHERE productid = ?", (productid,)
+            "DELETE FROM cart WHERE productid = ? AND id = ?", (productid,userid)
         ).rowcount
-        print(f"{rows_deleted} rows deleted.")
+        self.conn.commit()
+
+    def clear_user_cart(self, userid):
+        self.conn.execute(
+            f"DELETE FROM cart WHERE id = {userid}"
+        )
+        self.conn.commit()
 
     def create_account(self, firstname, lastname, email, password):
         self.execute('INSERT INTO users (firstname, lastname, email, password) VALUES (?, ?, ?, ?)',

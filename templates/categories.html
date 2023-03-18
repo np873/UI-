@@ -8,6 +8,7 @@ Categories
 {% block content %}
 <script>
   let user;
+  let cart_quantity = {{ session['cart_quantity']|default(0)|tojson }};
   {% if session['user'] %}
       user = "{{ session['user'] }}";
   {% else %}

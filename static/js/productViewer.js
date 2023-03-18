@@ -67,11 +67,7 @@ function ProductViewer(numRows, productsPerRow) {
     }
 }
 $(document).ready(function() {
-const cartQuantity = sessionStorage.getItem('cartQuantity');
-if (cartQuantity !== null) {
-  $('#cart-quantity').text(cartQuantity);
-}
-console.log(cartQuantity);
+$('#cart-quantity').text(cart_quantity);
 $(document).on('click', '.product-link', function(event) {
     event.preventDefault();  // prevent the default link behavior
     const productid = $(this).attr('id').replace('product-link-', '');  // extract the product ID from the anchor tag ID
@@ -98,11 +94,8 @@ function addToCart(clickedButton) {
       weight: card.find('.product-weight').text(), 
       image: card.find('.product-image').attr('src'),
       productid: productid,
+      cartQuantity: cart_quantity, 
     };
-    console.log('Product:', product);
-    // rest of the code
-
-
     if (parseInt(product.quantity) > 0) {
       console.log('Product added:', product);
       card.find('.product-added-message').fadeIn(500, function() {
@@ -110,9 +103,10 @@ function addToCart(clickedButton) {
       });
 
       // Update cart icon and total
-      const currentQuantity = parseInt($('#cart-quantity').text());
-      const newQuantity = currentQuantity + parseInt(product.quantity);
+      const newQuantity =  cart_quantity + parseInt(product.quantity);
       $('#cart-quantity').text(newQuantity);
+      product.cartQuantity = newQuantity;
+      cart_quantity = newQuantity;
 
       // Save product details to database
       console.log(product.productId); // check that productId is not empty
@@ -123,7 +117,6 @@ function addToCart(clickedButton) {
         data: JSON.stringify(product),
         success: function(data) {
           console.log('Product saved to database:', data);
-    sessionStorage.setItem('cartQuantity', newQuantity);
         },
         error: function(xhr, status, error) {
           console.error('Error saving product to database:', error);

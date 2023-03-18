@@ -13,13 +13,8 @@
       $('.product-weight').text(product[0].weight);
       $('.product-image').attr('src', `/static/img/products/${product[0].image}`);
     });
-  
-    const cartQuantity = sessionStorage.getItem('cartQuantity');
-    if (cartQuantity !== null) {
-      $('#cart-quantity').text(cartQuantity);
-    }
-    console.log(cartQuantity)
-  
+      $('#cart-quantity').text(cart_quantity);
+    
     $(document).off('click', '.add-to-cart-btn').on('click', '.add-to-cart-btn', function() {
       if (!user) {
           showAlertIfNotSignedIn();
@@ -43,6 +38,7 @@ function addToCart(clickedButton, productid) {
     weight: card.find('.product-weight').text(),
     image: card.find('.product-image').attr('src'),
     productid: productid, // include productid in the object
+    cartQuantity: cart_quantity, 
   };
 
   if (parseInt(product.quantity) > 0) {
@@ -52,9 +48,10 @@ function addToCart(clickedButton, productid) {
     });
 
     // Update cart icon and total
-    const currentQuantity = parseInt($('#cart-quantity').text());
-    const newQuantity = currentQuantity + parseInt(product.quantity);
+    const newQuantity = cart_quantity + parseInt(product.quantity);
     $('#cart-quantity').text(newQuantity);
+    product.cartQuantity = newQuantity;
+    cart_quantity = newQuantity;
     // Save product details to database
     console.log(product.productId); // check that productId is not empty
     $.ajax({
@@ -64,7 +61,6 @@ function addToCart(clickedButton, productid) {
       data: JSON.stringify(product),
       success: function (data) {
         console.log('Product saved to database:', data);
-        sessionStorage.setItem('cartQuantity', newQuantity);
       },
       error: function (xhr, status, error) {
         console.error('Error saving product to database:', error);

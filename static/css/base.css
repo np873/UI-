@@ -1,6 +1,7 @@
 body {
     font-size: 1rem;
-}
+    font-family: "Montserrat", sans-serif;
+  }
 
 header {
     background: #ff7f50;
@@ -161,4 +162,9 @@ input::placeholder{
    color: white;
    padding: 0.5px;
    padding-left: 15px;
+}
+
+.cart-image {
+  width: 60px; !important
+  height: 60px; !important
 }

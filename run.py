@@ -35,7 +35,8 @@ def sign_in():
             user = get_db().get_user(email)
             if user:
                 if pbkdf2_sha256.verify(password, user['password']):
-                    session['user'] = user                
+                    session['user'] = user 
+                    session['cart_quantity'] = get_db().get_cart_items_count(session['user']['userid'])               
                     return redirect('/')
             else:
                 message = "User unknown, please try again"
@@ -76,6 +77,7 @@ def create_user():
 
 @app.route('/logout')
 def logout():
+    session['cart_quantity'] = 0
     session.pop('user', None)
     return redirect('/')
 
@@ -115,7 +117,6 @@ def api_get_product_detail():
     product = get_db().get_product_detail(productid)
     return jsonify(product)
 
-
 @app.route('/product_detail')
 def product_detail():
     return render_template('product_detail.html')
@@ -123,57 +124,53 @@ def product_detail():
 @app.route('/api/add_to_cart', methods=['POST'])
 def add_to_cart():
     data = request.get_json()
-    cartid = session.get('cartid')
+    userid = session['user'].get('userid')
     productid = data.get('productid')
     name = data.get('name')
     price = data.get('price')
     quantity = data.get('quantity')
     weight = data.get('weight')
     image = data.get('image')
-
+    session['cart_quantity'] = data.get('cartQuantity')
     # Create a new CartItem object
     productid = data.get('productid')
     quantity = data.get('quantity')
-    existing_item = get_db().get_cart_items(productid, quantity)
+    existing_item = get_db().get_cart_items(userid, productid)
     if len(existing_item) == 0: 
-        data = get_db().insert('INSERT INTO cart (cartid, productid, name, price, quantity, weight, image) VALUES (?, ?, ?, ?, ?, ?, ?)', (cartid, productid, name, price, quantity, weight, image))
-        print(data)
+        data = get_db().insert('INSERT INTO cart (productid, id, name, price, quantity, weight, image) VALUES (?, ?, ?, ?, ?, ?, ?)', (productid, userid, name, price, quantity, weight, image))
     else:
-        get_db.insert('UPDATE cart SET quantity = quantity + ? WHERE uid = ? WHERE productid = ?', (quantity, productid))
-
-    return jsonify({'message': 'Product added to cart successfully.'})
-
+        get_db().insert('UPDATE cart SET quantity = quantity + ? WHERE id = ? AND productid = ?', (quantity, userid, productid))
+    return jsonify({'status': 'success', 'message': 'Product added to cart successfully.'})
 
 @app.route('/api/get_cart_items')
-def get_cart_items():
-    cartid = request.args.get('cartid')
-    quantity = request.args.get('quantity')
-    data = get_db().select('SELECT * FROM cart')
-    cart = get_db().get_cart_items(cartid, quantity)
-    return jsonify(data)
+def api_get_cart_items():
+    userid = session['user'].get('userid')
+    cart_items = get_db().get_cart_items(userid)
+    return jsonify(cart_items)
 
-@app.route('/cart')
+@app.route('/cart', strict_slashes=False)
 def cart():
-    data = get_db().select('SELECT * FROM cart')
-    print(data)
+    userid = session['user'].get('userid')
+    data = get_db().get_cart_items(userid)
     return render_template('cart.html', data=data)
 
 @app.route('/api/remove_from_cart', methods=['POST'])
 def remove_from_cart():
     data = request.get_json()
+    userid = session['user'].get('userid')
     productid = data.get('productId')
-
     # Remove item from the cart
-    get_db().remove_from_cart(productid)
+    get_db().remove_from_cart(productid, userid)
+    session['cart_quantity'] = get_db().get_cart_items_count(userid)               
 
-    # Verify if the product is still present in the cart
-    data = get_db().select('SELECT * FROM cart WHERE productid = ?', (productid,))
-    if not data:
-        return jsonify({'message': 'Product removed from cart successfully.'})
-    else:
-        return jsonify({'message': 'Product not removed from cart.'}), 400
+    return jsonify({'message': 'Product removed from cart successfully.'})
 
-
+@app.route('/api/place_order', methods=['GET'])
+def place_order():
+    userid = session['user'].get('userid')
+    get_db().clear_user_cart(userid)
+    session['cart_quantity'] = 0
+    return jsonify({'message': 'Order placed successfully'})
 
 if __name__ == '__main__':
     app.run(host='localhost', port=8080, debug=True)

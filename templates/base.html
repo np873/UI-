@@ -69,10 +69,12 @@
                         {% endif %}
                     </ul>
                 </div>
+                <a href="{% if session['user'] %}/cart{% endif %}" class="nav-item" {% if not session['user'] %}
+                onclick="alert('Please sign in to add products to cart!'); return false;"{% endif %}>
+                <img src="/static/img/cart1.svg" id="cart-icon" style="max-height: 25px;"></a>
 
-                <a href="/cart" class="nav-item"><img src="/static/img/cart1.svg" id="cart-icon" style="max-height: 25px;"></a>
-                <span id="cart-quantity">0</span>
-                
+                <!-- <a href="/cart" class="nav-item"><img src="/static/img/cart1.svg" id="cart-icon" style="max-height: 25px;"></a> -->
+                <span id="cart-quantity"> {{ session['cart_quantity'] }} </span>
             </nav>
         </div>
     </header>
@@ -81,8 +83,9 @@
     </main>
 
 </body>
+    {% block footer %}
     <div class="footer">
         <p><a href="/" style="color: white">Home</a>&emsp;Contact: aad@mariocart.com</p>
     </div>
-
+    {% endblock %}
 </html>

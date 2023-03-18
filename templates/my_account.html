@@ -6,17 +6,6 @@ My Account
 
 {% block content %}
 
-<script>
-  let user;
-  {% if session['user'] %}
-      user = "{{ session['user'] }}";
-  {% else %}
-      user = null;
-  {% endif %}
-</script>
-
-<script src="/static/js/productDetail.js"></script>
-
 <head>
     <title>
         Mariocart - My Account
@@ -26,7 +15,6 @@ My Account
 <body>
 
     <div class="text-right" style="padding-top: 1rem; padding-right: 1rem;">
-        <button id="close-button" type="button" class="btn-close" aria-label="Close" style="color: red; font-size: large;">&times;</button>
         <script type="text/javascript">
             document.getElementById("close-button").onclick = function () {
                 window.location.href = "/";
